@@ -1,8 +1,16 @@
 
+import sys
+import os
+
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if ROOT_DIR not in sys.path:
+    sys.path.append(ROOT_DIR)
+
 from utils.text_cleaner import clean_medical_text
 from utils.extractor import extract_values
 from rules.risk_rules import detect_risks
 from utils.summary_generator import generate_clinical_summary
+
 
 
 

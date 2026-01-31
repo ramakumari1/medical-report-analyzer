@@ -1,14 +1,17 @@
-from backend import process_medical_report, process_medical_image
+import sys
+import os
 
+# Add project root to PYTHONPATH
+ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+if ROOT_DIR not in sys.path:
+    sys.path.append(ROOT_DIR)
 
 import streamlit as st
 import pandas as pd
-import os
 from datetime import datetime
 
-from backend import process_medical_report, process_medical_image
-from utils.ui_formatter import format_extracted_values
-from utils.summary_generator import generate_clinical_summary
+from app.backend import process_medical_report, process_medical_image
+
 
 
 # ---------------- PAGE CONFIG ----------------
