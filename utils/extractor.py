@@ -1,25 +1,23 @@
+
 import re
 
 def extract_values(text):
-    """
-    Extracts common CBC / lab values from medical text
-    """
     values = {}
     text = text.lower()
 
-    # OCR common fixes
-    text = text.replace("haemoglobin", "hemoglobin")
+    # Fix common OCR mistakes
     text = text.replace("haemosibin", "hemoglobin")
+    text = text.replace("haemoglobin", "hemoglobin")
 
     def find_value(keyword, max_chars=40):
-        match = re.search(rf"{keyword}.{{0,{max_chars}}}", text)
+        match = re.search(rf"{keyword}(.{{0,{max_chars}}})", text)
         if match:
-            nums = re.findall(r"\d+\.?\d*", match.group())
+            nums = re.findall(r"\d+\.?\d*", match.group(1))
             if nums:
                 return float(nums[0])
         return None
 
-    tests = {
+    values_map = {
         "hemoglobin": "hemoglobin",
         "rbc": "rbc",
         "wbc": "wbc",
@@ -30,9 +28,9 @@ def extract_values(text):
         "rdw": "rdw"
     }
 
-    for key, label in tests.items():
-        value = find_value(key)
-        if value is not None:
-            values[label] = value
+    for key, label in values_map.items():
+        val = find_value(key)
+        if val is not None:
+            values[label] = val
 
     return values
