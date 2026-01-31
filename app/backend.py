@@ -1,7 +1,6 @@
 import os
 import sys
 
-# -------- STREAMLIT CLOUD PATH FIX --------
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if ROOT_DIR not in sys.path:
     sys.path.append(ROOT_DIR)
@@ -22,9 +21,10 @@ def process_medical_report(text):
 
 
 def process_medical_image(image_path):
+    # OCR is disabled on cloud, this returns a safe message
     raw_text = extract_text_from_image(image_path)
     cleaned_text = clean_medical_text(raw_text)
     values = extract_medical_values(cleaned_text)
     risks = detect_health_risks(values)
-    report_type = detect_report_type(cleaned_text)
+    report_type = "Image OCR (Disabled on Cloud)"
     return cleaned_text, values, risks, report_type
