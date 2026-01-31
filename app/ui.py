@@ -1,17 +1,19 @@
-import sys
 import os
+import sys
+from datetime import datetime
 
-# Add project root to PYTHONPATH
+import streamlit as st
+import pandas as pd
+
+# ---------------- PATH FIX (IMPORTANT FOR STREAMLIT CLOUD) ----------------
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if ROOT_DIR not in sys.path:
     sys.path.append(ROOT_DIR)
 
-import streamlit as st
-import pandas as pd
-from datetime import datetime
-
+# ---------------- IMPORTS ----------------
 from app.backend import process_medical_report, process_medical_image
-
+from utils.summary_generator import generate_clinical_summary
+from utils.ui_formatter import format_extracted_values
 
 
 # ---------------- PAGE CONFIG ----------------
@@ -60,6 +62,9 @@ with tabs[0]:
 
     if image_file:
         st.image(image_file, caption="Uploaded Report", use_column_width=True)
+
+        # ✅ SAFE FOR STREAMLIT CLOUD
+        os.makedirs("data/raw_reports", exist_ok=True)
 
         image_path = os.path.join("data/raw_reports", image_file.name)
         with open(image_path, "wb") as f:
@@ -142,7 +147,6 @@ with tabs[2]:
 
         # ---- Clinical Table ----
         st.subheader("📋 Clinical Summary")
-
         rows = format_extracted_values(data["values"])
 
         if rows:
@@ -187,7 +191,7 @@ with tabs[2]:
         else:
             st.success("NORMAL")
 
-        # ---- Processed OCR Text (DEBUG ONLY) ----
+        # ---- Processed Text ----
         with st.expander("🔍 View Processed Text (For Reference)"):
             st.text(data["cleaned"])
 
