@@ -1,10 +1,9 @@
 
-
 from utils.text_cleaner import clean_medical_text
-from utils.extractor import extract_medical_values
-from utils.report_classifier import detect_report_type
+from utils.extractor import extract_values
+from rules.risk_rules import detect_risks
 from utils.summary_generator import generate_clinical_summary
-from rules.risk_rules import detect_health_risks
+
 
 
 

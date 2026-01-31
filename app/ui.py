@@ -1,4 +1,6 @@
-from app.backend import process_medical_report, process_medical_image
+from backend import process_medical_report, process_medical_image
+
+
 import streamlit as st
 import pandas as pd
 import os
