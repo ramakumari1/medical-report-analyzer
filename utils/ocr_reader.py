@@ -1,22 +1,13 @@
-import os
-import pytesseract
 from PIL import Image
+import pytesseract
 
 
 def extract_text_from_image(image_path):
     """
-    OCR text extraction.
-    Works locally where Tesseract is installed.
-    Gracefully disables OCR on Streamlit Cloud.
+    Extract text from image using Tesseract OCR.
+    On Streamlit Cloud, Tesseract is NOT available,
+    so this function gracefully falls back.
     """
-
-    # Streamlit Cloud environment check
-    if os.environ.get("STREAMLIT_SERVER_RUNNING"):
-        return (
-            "OCR is disabled on Streamlit Cloud.\n\n"
-            "Please use the Text Input tab or run this project locally "
-            "to enable OCR-based image analysis."
-        )
 
     try:
         image = Image.open(image_path)
@@ -24,7 +15,12 @@ def extract_text_from_image(image_path):
         return text
 
     except pytesseract.TesseractNotFoundError:
+        # 🔴 This ALWAYS happens on Streamlit Cloud
         return (
-            "Tesseract OCR engine not found.\n\n"
-            "OCR works only on local machines where Tesseract is installed."
+            "OCR is not available on this deployment environment.\n\n"
+            "Please use the Text Input tab, or run this project locally "
+            "to enable OCR-based image analysis."
         )
+
+    except Exception as e:
+        return f"OCR failed due to unexpected error: {str(e)}"
