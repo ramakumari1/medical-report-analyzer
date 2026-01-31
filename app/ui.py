@@ -5,12 +5,12 @@ from datetime import datetime
 import streamlit as st
 import pandas as pd
 
-# ---------------- PATH FIX (IMPORTANT FOR STREAMLIT CLOUD) ----------------
+# -------- STREAMLIT CLOUD PATH FIX --------
 ROOT_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
 if ROOT_DIR not in sys.path:
     sys.path.append(ROOT_DIR)
 
-# ---------------- IMPORTS ----------------
+# -------- IMPORTS --------
 from app.backend import process_medical_report, process_medical_image
 from utils.summary_generator import generate_clinical_summary
 from utils.ui_formatter import format_extracted_values
@@ -63,7 +63,7 @@ with tabs[0]:
     if image_file:
         st.image(image_file, caption="Uploaded Report", use_column_width=True)
 
-        # ✅ SAFE FOR STREAMLIT CLOUD
+        # Cloud-safe directory creation
         os.makedirs("data/raw_reports", exist_ok=True)
 
         image_path = os.path.join("data/raw_reports", image_file.name)
